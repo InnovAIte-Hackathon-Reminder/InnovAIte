@@ -15,29 +15,22 @@ genai.configure(api_key=GOOGLE_API_KEY)
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
 @app.route('/arrange_calendar', methods=['POST'])
 def arrange_calendar():
     try:
         data = request.get_json()
-        fixed_deadlines = data.get('fixed_deadlines', [])
+        print(data)
+        fixed_deadlines = data.get('deadlines', [])
         ai_assigned_tasks = data.get('ai_assigned_tasks', [])
-        user_preferences = data.get('user_preferences')
 
-        if not fixed_deadlines or not user_preferences:
-            return jsonify({"error": "Missing required data"}), 400
-
-        model = genai.GenerativeModel('gemini-pro')
+        model = genai.GenerativeModel('gemini-2.0-flash')
 
         # Generate work events for deadlines (using user-provided duration)
         for deadline in fixed_deadlines:
             ai_assigned_tasks.append({
                 "title": f"Work on {deadline['title']}",
-                "duration": deadline['duration'],  # User-provided duration
-                "deadline": deadline['deadline']
+                "duration": deadline.get('duration'),  # User-provided duration
+                "deadline": deadline.get('start')
             })
 
         prompt_arrange = f"""
@@ -47,14 +40,17 @@ def arrange_calendar():
         Tasks:
         {ai_assigned_tasks}
 
-        User Preferences:
-        {user_preferences}
 
         Output the rearranged tasks in a JSON array format, where each task has the following keys: title, start, end, description, and duration.
+
+        ONLY GIVE A RAW JSON OUTPUT. NO MARKDOWN AT ALL OR ANY PRIOR EXPLANATION. I JUST WANT THE JSON OUTPUT
         """
 
         response = model.generate_content(prompt_arrange)
-        arranged_tasks_text = response.text
+        arranged_tasks_text = (response.text.replace("`", "")).replace("json", "")
+
+        print("Response from Gemini:")
+        print(arranged_tasks_text)
 
         try:
             arranged_tasks = json.loads(arranged_tasks_text)

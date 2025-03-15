@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='utf-8' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+    <link rel="stylesheet" href="/static/index.css"> <!-- Link to external CSS -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: <%- JSON.stringify(user.events || []) %>
+            });
+            calendar.render();
+        });
+    </script>
+</head>
+
+<body>
+    <div id="container">
+        <div id="calendar-container">
+            <div id='calendar'></div>
+        </div>
+        <div id="sidebar">
+			<div id="form-container">
+				<h2>Add New Event</h2>
+				<form id="event-form">
+					<label for="event-name">Event Name:</label>
+					<input type="text" id="event-name" name="eventName" required>
+	
+					<label for="due-date">Due Date:</label>
+					<input type="date" id="due-date" name="dueDate" required>
+	
+					<label for="description">Description:</label>
+					<textarea id="description" name="description" rows="3" required></textarea>
+	
+					<button type="submit">Add Event</button>
+				</form>
+			</div>
+            <!-- <h2>Upcoming Events</h2>
+            <ul id="event-list">
+                <% if (user.events && user.events.length) { %>
+                    <% user.events.forEach(function(event) { %>
+                        <li>
+                            <strong><%= event.title %></strong><br>
+                            <span><%= event.start %></span>
+                        </li>
+                    <% }); %>
+                <% } else { %>
+                    <p>No upcoming events.</p>
+                <% } %>
+            </ul> -->
+        </div>
+    </div>
+</body>
+
+</html>

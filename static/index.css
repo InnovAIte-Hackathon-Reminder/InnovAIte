@@ -1,0 +1,102 @@
+/* Ensure full-screen layout */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Fullscreen container */
+#container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background: white;
+    overflow: hidden;
+}
+
+/* Calendar container (75% width) */
+#calendar-container {
+    flex: 3;
+    padding: 20px;
+    overflow: hidden;
+}
+
+/* Sidebar (25% width) */
+#sidebar {
+    flex: 1;
+    background: #007BFF;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+}
+
+/* Make sure FullCalendar uses all available space */
+#calendar {
+    width: 100%;
+    height: 100%;
+}
+
+/* Event List */
+#event-list {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+#event-list li {
+    background: white;
+    color: black;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 768px) {
+    #container {
+        flex-direction: column;
+    }
+    #calendar-container, #sidebar {
+        flex: none;
+        width: 100%;
+        height: 50vh;
+    }
+}
+.fc-button {
+    background-color: #007BFF !important; /* Change button background */
+    color: white !important; /* Change text color */
+    border: none !important;
+    border-radius: 5px !important;
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+/* Hover effect */
+.fc-button:hover {
+    background-color: #0056b3 !important; /* Darker blue */
+}
+
+/* Active (clicked) button effect */
+.fc-button:active {
+    background-color: #003d80 !important; /* Even darker blue */
+}
+
+/* Disabled button styling */
+.fc-button-disabled {
+    background-color: #a0a0a0 !important;
+    color: #fff !important;
+    cursor: not-allowed;
+}
